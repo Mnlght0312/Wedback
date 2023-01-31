@@ -1,0 +1,13 @@
+###
+
+POST http://localhost:8000/
+Content-Type: application/json
+
+{
+    "id": 10, "menuname": "bbbb"
+}
+
+###
+
+GET http://localhost:8000/
+Content-Type: application/json
