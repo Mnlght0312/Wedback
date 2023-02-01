@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 
 const menuRouter = require("./routes/menu.route.js");
-const cateRouter = require("./routes/category.route.js");
+// const cateRouter = require("./routes/category.route.js");
 
 const fs = require("fs");
 
