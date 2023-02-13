@@ -1,13 +1,14 @@
 ###
 
-POST http://localhost:8000/
+POST http://localhost:8000/api/menu
 Content-Type: application/json
 
 {
-    "id": 10, "menuname": "bbbb"
+    "id": 10, "menuname": "bbbb",
+    "id": 11, "kidsname": "ls"
 }
 
 ###
 
-GET http://localhost:8000/
+GET http://localhost:8000/api/menu
 Content-Type: application/json
