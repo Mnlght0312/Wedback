@@ -1,0 +1,42 @@
+[
+  {
+    "id": "f89afa41-83e7-4103-aaa8-921091519fb8",
+    "productName": "AWP | Wildfire ",
+    "price": "100",
+    "InStock": "3",
+    "categoryId": 0,
+    "thumbImage": "https://res.cloudinary.com/djtvcia4j/image/upload/v1676258521/b1t2y0xidcncj77ag9ye.jpg",
+    "images": [],
+    "createdDate": 1676258526957
+  },
+  {
+    "id": "5d7e5790-6a00-42a0-9ff1-d5b00ec0eedb",
+    "productName": "AWP | Hyper Beast",
+    "price": "80",
+    "InStock": "2",
+    "categoryId": 0,
+    "thumbImage": "https://res.cloudinary.com/djtvcia4j/image/upload/v1676260743/gggo1jhrynonctr8ltej.jpg",
+    "images": [],
+    "createdDate": 1676260745457
+  },
+  {
+    "id": "2dfbcaf9-15aa-4d95-8c78-c72baddf8c83",
+    "productName": "AWP | Chromatic Aberration",
+    "price": "135",
+    "InStock": "5",
+    "categoryId": 0,
+    "thumbImage": "https://res.cloudinary.com/djtvcia4j/image/upload/v1676261627/tt5sdaeixk4ubfxkbiyx.jpg",
+    "images": [],
+    "createdDate": 1676261629931
+  },
+  {
+    "id": "40a670df-6037-4bf1-a4c6-5ac9261c39d0",
+    "productName": "M4A4 | Coalition ",
+    "price": "24",
+    "InStock": "20",
+    "categoryId": 0,
+    "thumbImage": "https://res.cloudinary.com/djtvcia4j/image/upload/v1676262026/bqgkpulz3ztkxgtgu2zp.jpg",
+    "images": [],
+    "createdDate": 1676262028468
+  }
+]
