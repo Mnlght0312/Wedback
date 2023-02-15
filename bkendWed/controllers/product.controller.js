@@ -52,34 +52,52 @@ exports.create = (request, response) => {
   });
 };
 
-exports.update = (req, res) => {
-  const { id, menuName, link, position } = request.body;
+exports.update = (request, response) => {
+  const { productName, price, InStock, categoryId, thumbImage, images } =
+    request.body;
+  const { id } = request.params;
+
+  // console.log(productName, price, InStock, categoryId, thumbImage, images);
+  console.log(id);
+
   fs.readFile(dataFile, "utf-8", (readErr, data) => {
     if (readErr) {
-      return response.json({ status: false, message: readErr });
+      return response.status(500).json({ error: readErr });
     }
 
     const parsedData = JSON.parse(data);
 
-    const updateData = parsedData.map((menuObj) => {
-      if (menuObj.id == id) {
-        return { ...menuObj, menuName, link, position };
+    const updatedData = parsedData.map((product) => {
+      if (product.id === id) {
+        return {
+          ...product,
+          productName,
+          price: price,
+          InStock,
+          categoryId,
+          thumbImage,
+          images,
+        };
       } else {
-        return menuObj;
+        return product;
       }
     });
 
-    fs.writeFile(dataFile, JSON.stringify(updateData), (writeErr) => {
+    fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
       if (writeErr) {
-        return response.json({ status: false, message: writeErr });
+        return response.status(500).json({ error: writeErr });
       }
 
-      return response.json({ status: true, result: updateData });
+      console.log(updatedData);
+
+      const updatedProduct = updatedData.find((product) => product.id === id);
+
+      return response.json({ status: true, result: updatedProduct });
     });
   });
 };
 
-exports.delete = (req, res) => {
+exports.delete = (request, response) => {
   const { id } = request.params;
   fs.readFile(dataFile, "utf-8", (readErr, data) => {
     if (readErr) {

@@ -13,3 +13,20 @@ Content-Type: application/json
 ###
 
 GET http://localhost:8080/api/product
+Content-Type: application/json
+
+###
+
+DELETE http://localhost:8080/api/product/0b374bd3-9b6e-4bbe-b301-142c78002d18
+Content-Type: application/json
+
+###
+PUT http://localhost:8080/api/product/b52fbdad-cd9d-4f2f-8a55-94613f6a7a69
+Content-Type: application/json
+
+{
+    "productName": "aiiiesh",
+    "price": 500,
+    "inStock": 50,
+    "categoryId": 2
+}
