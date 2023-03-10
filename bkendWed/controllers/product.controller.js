@@ -16,7 +16,7 @@ exports.getAll = (request, response) => {
 };
 
 exports.create = (request, response) => {
-  const { productName, price, InStock, categoryId, thumbImage, images } =
+  const { productName, price, InStock, categoryId, thumbImage, images, description } =
     request.body;
 
   if (!productName) {
@@ -37,6 +37,7 @@ exports.create = (request, response) => {
       categoryId,
       thumbImage,
       images,
+      description,
       createdDate: Date.now(),
     };
 
@@ -53,7 +54,7 @@ exports.create = (request, response) => {
 };
 
 exports.update = (request, response) => {
-  const { productName, price, InStock, categoryId, thumbImage, images } =
+  const { productName, price, InStock, categoryId, thumbImage, images, description } =
     request.body;
   const { id } = request.params;
 
@@ -77,6 +78,7 @@ exports.update = (request, response) => {
           categoryId,
           thumbImage,
           images,
+          description,
         };
       } else {
         return product;
