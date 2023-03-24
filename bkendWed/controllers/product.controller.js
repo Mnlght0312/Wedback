@@ -1,121 +1,125 @@
-const fs = require("fs");
-const uuid = require("uuid");
+const Product = require("../models/product.model");
 
-const dataFile = process.cwd() + "/data/product.json";
-
-exports.getAll = (request, response) => {
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return response.json({ status: false, message: readErr });
-    }
-
-    const savedData = data ? JSON.parse(data) : [];
-
-    return response.json({ status: true, result: savedData });
-  });
+// Get all products
+exports.getAll = (req, res) => {
+  Product.find()
+    .then((products) => {
+      res.status(200).json(products);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
 };
 
-exports.create = (request, response) => {
-  const { productName, price, InStock, categoryId, thumbImage, images, description } =
-    request.body;
+// Create a new product
+exports.create = (req, res) => {
+  const product = new Product({
+    name: req.body.name,
+    description: req.body.description,
+    price: req.body.price,
+    category: req.body.category,
+  });
 
-  if (!productName) {
-    return response.json({ status: false, message: "product name oruulna uu" });
+  product
+    .save()
+    .then((result) => {
+      console.log(result);
+      res.status(201).json({
+        message: "Product created successfully",
+        createdProduct: {
+          name: result.name,
+          description: result.description,
+          price: result.price,
+          category: result.category,
+          _id: result._id,
+          request: {
+            type: "GET",
+            url: "http://localhost:3000/api/products/" + result._id,
+          },
+        },
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+// Get a single product
+exports.getOne = (req, res) => {
+  const id = req.params.productId;
+  Product.findById(id)
+    .then((product) => {
+      if (!product) {
+        return res.status(404).json({
+          message: "Product not found",
+        });
+      }
+      res.status(200).json(product);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+// Update a product
+exports.update = (req, res) => {
+  const id = req.params.productId;
+  const updateOps = {};
+  for (const key of Object.keys(req.body)) {
+    updateOps[key] = req.body[key];
   }
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return response.json({ status: false, message: readErr });
-    }
-
-    const parsedData = data ? JSON.parse(data) : [];
-
-    const newObj = {
-      id: uuid.v4(),
-      productName,
-      price,
-      InStock,
-      categoryId,
-      thumbImage,
-      images,
-      description,
-      createdDate: Date.now(),
-    };
-
-    parsedData.push(newObj);
-
-    fs.writeFile(dataFile, JSON.stringify(parsedData), (writeErr) => {
-      if (writeErr) {
-        return response.json({ status: false, message: writeErr });
-      }
-
-      return response.json({ status: true, result: parsedData });
+  Product.findByIdAndUpdate(id, { $set: updateOps })
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({
+        message: "Product updated",
+        request: {
+          type: "GET",
+          url: "http://localhost:3000/api/products/" + id,
+        },
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        error: err,
+      });
     });
-  });
 };
 
-exports.update = (request, response) => {
-  const { productName, price, InStock, categoryId, thumbImage, images, description } =
-    request.body;
-  const { id } = request.params;
-
-  // console.log(productName, price, InStock, categoryId, thumbImage, images);
-  console.log(id);
-
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return response.status(500).json({ error: readErr });
-    }
-
-    const parsedData = JSON.parse(data);
-
-    const updatedData = parsedData.map((product) => {
-      if (product.id === id) {
-        return {
-          ...product,
-          productName,
-          price: price,
-          InStock,
-          categoryId,
-          thumbImage,
-          images,
-          description,
-        };
-      } else {
-        return product;
-      }
+// Delete a product
+exports.delete = (req, res) => {
+  const id = req.params.productId;
+  Product.findByIdAndDelete(id)
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({
+        message: "Product deleted",
+        request: {
+          type: "POST",
+          url: "http://localhost:3000/api/products",
+          body: {
+            name: "String",
+            description: "String",
+            price: "Number",
+            category: "String",
+          },
+        },
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        error: err,
+      });
     });
-
-    fs.writeFile(dataFile, JSON.stringify(updatedData), (writeErr) => {
-      if (writeErr) {
-        return response.status(500).json({ error: writeErr });
-      }
-
-      console.log(updatedData);
-
-      const updatedProduct = updatedData.find((product) => product.id === id);
-
-      return response.json({ status: true, result: updatedProduct });
-    });
-  });
-};
-
-exports.delete = (request, response) => {
-  const { id } = request.params;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return response.json({ status: false, message: readErr });
-    }
-
-    const parsedData = JSON.parse(data);
-
-    const deletedData = parsedData.filter((e) => e.id != id);
-
-    fs.writeFile(dataFile, JSON.stringify(deletedData), (writeErr) => {
-      if (writeErr) {
-        return response.json({ status: false, message: writeErr });
-      }
-
-      return response.json({ status: true, result: deletedData });
-    });
-  });
 };

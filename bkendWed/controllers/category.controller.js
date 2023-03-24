@@ -1,111 +1,51 @@
-const fs = require("fs");
-const uuid = require("uuid");
+const Category = require("../model/category.model");
 
-const dataFile = process.cwd() + "/data/category.json";
-
-exports.create = (request, response) => {
-  const { categoryName } = request.body;
-
-  fs.readFile(dataFile, "utf-8", (err, data) => {
-    if (err) {
-      return response.json({ status: false, message: err });
-    }
-    const parsedData = data ? JSON.parse(data) : [];
-
-    const newObj = { id: uuid.v4(), categoryName, createdDate: Date.now() };
-
-    parsedData.push(newObj);
-
-    fs.writeFile(dataFile, JSON.stringify(parsedData), (err) => {
-      if (err) {
-        return response.json({ status: false, message: err });
-      }
-      return response.json({ status: true, message: "Success" });
-    });
-  });
-};
-
-exports.getAll = (request, response) => {
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return response.json({ status: false, message: readErr });
-    }
-
-    const savedData = data ? JSON.parse(data) : [];
-
-    return response.json({ status: true, result: savedData });
-  });
-};
-
-exports.getOne = (request, response) => {
-  const { id } = request.params;
-
-  if (!id) {
-    return response.json({ status: false, message: "id not found" });
+exports.getAll = async (req, res) => {
+  try {
+    const result = await Category.find({});
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
   }
-
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return response.json({ status: false, message: readErr });
-    }
-
-    const savedData = JSON.parse(data);
-
-    const oneCategory = savedData.find((item) => item.id == id);
-
-    if (oneCategory) {
-      return response.json({ status: true, result: oneCategory });
-    } else {
-      return response.json({ status: false, message: "product not found" });
-    }
-  });
 };
 
-exports.update = (request, response) => {
-  const { id } = request.params;
-  const { categoryName } = request.body;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return response.json({ status: false, message: readErr });
-    }
-
-    const parsedData = data ? JSON.parse(data) : [];
-
-    const updateData = parsedData.map((cateObj) => {
-      if (cateObj.id == id) {
-        return { ...cateObj, categoryName, updatedDate: Date.now() };
-      } else {
-        return cateObj;
-      }
-    });
-
-    fs.writeFile(dataFile, JSON.stringify(updateData), (writeErr) => {
-      if (writeErr) {
-        return response.json({ status: false, message: writeErr });
-      }
-
-      return response.json({ status: true, message: "Success update" });
-    });
-  });
+exports.getOne = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const result = await Category.findById({ _id });
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
+  }
 };
 
-exports.delete = (request, response) => {
-  const { id } = request.params;
-  fs.readFile(dataFile, "utf-8", (readErr, data) => {
-    if (readErr) {
-      return response.json({ status: false, message: readErr });
-    }
+exports.createCategory = async (req, res) => {
+  try {
+    const result = await Category.create(req.body);
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
+  }
+};
 
-    const parsedData = data ? JSON.parse(data) : [];
-
-    const deletedData = parsedData.filter((e) => e.id != id);
-
-    fs.writeFile(dataFile, JSON.stringify(deletedData), (writeErr) => {
-      if (writeErr) {
-        return response.json({ status: false, message: writeErr });
-      }
-
-      return response.json({ status: true, message: "Success delete" });
+exports.updateCategory = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const result = await Category.findByIdAndUpdate({ _id }, req.body, {
+      new: true,
     });
-  });
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
+  }
+};
+
+exports.deleteCategory = async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const result = await Category.deleteOne({ _id });
+    res.json({ status: true, result });
+  } catch (err) {
+    res.json({ status: false, message: err });
+  }
 };
