@@ -32,11 +32,14 @@ exports.getOne = async (request, response) => {
 };
 
 exports.create = async (request, response) => {
-  const { userName, age } = request.body;
+  const { username, lastname, firstname, password, email } = request.body;
 
   const newObj = {
-    userName,
-    age,
+    firstname,
+    lastname,
+    username,
+    password,
+    email,
   };
 
   try {

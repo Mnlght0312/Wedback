@@ -1,10 +1,10 @@
 ###
 
-POST http://localhost:8000/api/user
+POST http://localhost:8080/api/user
 Content-Type: application/json
 
 {
-     "firsname": "Test",
+     "firstname": "Test",
      "lastname":"Test",
      "username":"test",
      "password":"wefwf",
@@ -13,23 +13,26 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8000/api/user/
+POST http://localhost:8080/api/user/
 Content-Type: application/json
 
 {
-     "userName": "Amar",
-     "age":9
+     "firstname": "Amar",
+     "lastname":"Hamar",
+     "username" : "cringe",
+     "password" : "qwe123",
+     "email": "something@gmail.com"
 }
 
 
 ###
-GET http://localhost:8000/api/user?limit=10
+GET http://localhost:8080/api/user?limit=10
 
 ###
-GET http://localhost:8000/api/user/101
+GET http://localhost:8080/api/user/101
 
 ###
-PUT http://localhost:8000/api/user/100
+PUT http://localhost:8080/api/user/100
 Content-Type: application/json
 
 {
@@ -37,4 +40,4 @@ Content-Type: application/json
 }
 
  ###
-GET http://localhost:8000/api/user/101
+GET http://localhost:8080/api/user/101
