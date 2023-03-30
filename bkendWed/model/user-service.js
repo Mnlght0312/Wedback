@@ -1,4 +1,4 @@
-const pool = require("../config/mysql-config");
+// const pool = require("../config/mysql-config");
 
 exports.getUsers = async (limit) => {
   try {
